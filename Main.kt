@@ -2,39 +2,56 @@ package search
 
 fun main() {
     println("Enter the number of people:")
-    val qtyOfLines = readLine()!!.toInt()
-    val lines = arrayOfNulls<String>(qtyOfLines)
+    val qtyOfPeople = readLine()!!.toInt()
+    val people = arrayOfNulls<String>(qtyOfPeople)
 
     println("Enter all people:")
-    for (i in 0 until qtyOfLines) {
-        lines[i] = readLine()!!
+    for (i in 0 until qtyOfPeople) {
+        people[i] = readLine()!!
     }
 
+    while (true) {
+        println()
+        println("=== Menu ===")
+        println("1. Find a person")
+        println("2. Print all people")
+        println("0. Exit")
+        val menuItemNumber = readLine()!!.toInt()
+
+        when (menuItemNumber) {
+            0 -> {
+                break
+            }
+            1 -> {
+                println()
+                println("Enter a name or email to search all suitable people.")
+                val dataToSearch = readLine()!!.toUpperCase()
+                var indexes = mutableListOf<Int>()
+                for (j in people.indices) {
+                    if (people[j]!!.toUpperCase().contains(dataToSearch)) {
+                        indexes.add(j)
+                    }
+                }
+                if (!indexes.isEmpty()) {
+                    for (k in indexes) {
+                        println(people[k])
+                    }
+                } else {
+                    println("No matching people found.")
+                }
+            }
+            2 -> {
+                println("=== List of people ===")
+                for (line in people) {
+                    println(line)
+                }
+            }
+            else -> {
+                println()
+                println("Incorrect option! Try again.")
+            }
+        }
+    }
     println()
-    println("Enter the number of search queries:")
-    val qtyOfSearch = readLine()!!.toInt()
-
-    for (i in 0 until qtyOfSearch) {
-        println()
-        println("Enter data to search people:")
-        val dataToSearch = readLine()!!.toUpperCase()
-
-        println()
-        println("Found people:")
-        var indexes = mutableListOf<Int>()
-        for (j in lines.indices) {
-            if (lines[j]!!.toUpperCase().contains(dataToSearch)) {
-                indexes.add(j)
-            }
-        }
-        if (!indexes.isEmpty()) {
-            for (k in indexes) {
-                println(lines[k])
-            }
-
-        } else {
-            println("No matching people found.")
-        }
-        indexes.clear()
-    }
+    println("Bye!")
 }
