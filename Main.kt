@@ -1,14 +1,9 @@
 package search
 
-fun main() {
-    println("Enter the number of people:")
-    val qtyOfPeople = readLine()!!.toInt()
-    val people = arrayOfNulls<String>(qtyOfPeople)
+import java.io.File
 
-    println("Enter all people:")
-    for (i in 0 until qtyOfPeople) {
-        people[i] = readLine()!!
-    }
+fun main(args: Array <String>) {
+    val people = File(args[1]).readLines()
 
     while (true) {
         println()
@@ -26,9 +21,9 @@ fun main() {
                 println()
                 println("Enter a name or email to search all suitable people.")
                 val dataToSearch = readLine()!!.toUpperCase()
-                var indexes = mutableListOf<Int>()
+                val indexes = mutableListOf<Int>()
                 for (j in people.indices) {
-                    if (people[j]!!.toUpperCase().contains(dataToSearch)) {
+                    if (people[j].toUpperCase().contains(dataToSearch)) {
                         indexes.add(j)
                     }
                 }
