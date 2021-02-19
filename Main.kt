@@ -2,8 +2,9 @@ package search
 
 import java.io.File
 
-fun main(args: Array <String>) {
+fun main(args: Array<String>) {
     val people = File(args[1]).readLines()
+    val invertedIndex = getInvertedIndex(people)
 
     while (true) {
         println()
@@ -21,18 +22,15 @@ fun main(args: Array <String>) {
                 println()
                 println("Enter a name or email to search all suitable people.")
                 val dataToSearch = readLine()!!.toUpperCase()
-                val indexes = mutableListOf<Int>()
-                for (j in people.indices) {
-                    if (people[j].toUpperCase().contains(dataToSearch)) {
-                        indexes.add(j)
-                    }
-                }
-                if (!indexes.isEmpty()) {
-                    for (k in indexes) {
-                        println(people[k])
-                    }
-                } else {
+
+                val qtyOfPeopleFound = invertedIndex[dataToSearch]?.size ?: 0
+                if (qtyOfPeopleFound == 0) {
                     println("No matching people found.")
+                } else {
+                    println("$qtyOfPeopleFound persons found:")
+                    for (lineIndex in invertedIndex[dataToSearch]!!){
+                        println(people[lineIndex])
+                    }
                 }
             }
             2 -> {
@@ -49,4 +47,20 @@ fun main(args: Array <String>) {
     }
     println()
     println("Bye!")
+}
+
+fun getInvertedIndex(people: List<String>): MutableMap<String, MutableList<Int>> {
+    val invertedIndex = mutableMapOf<String, MutableList<Int>>()
+    for (lineIndex in people.indices) {
+        val words = people[lineIndex].split(" ")
+        for (j in words.indices) {
+            var word = words[j].toUpperCase()
+            if (invertedIndex[word] == null) {
+                invertedIndex[word] = mutableListOf(lineIndex)
+            } else {
+                invertedIndex[word]!!.add(lineIndex)
+            }
+        }
+    }
+    return invertedIndex
 }
